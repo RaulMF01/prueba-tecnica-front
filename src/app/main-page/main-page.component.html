@@ -1,0 +1,31 @@
+<div class="container mt-5">
+    <div class="row">
+        <div class="col-12">
+            <label class="form-label" for="customFile">Default file input example</label>
+            <input type="file" class="form-control" id="customFile" (change)="onFileChange($event)" accept=".xls,.xlsx,application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" />
+        </div>
+    </div>
+    <div class="row mt-5">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-body">
+                    <table class="table table-striped">
+                        <tbody>
+                            <ng-container *ngFor="let file of DataFile index as inde">
+                                <tr class="pointer" *ngFor="let data of file; index as i"> 
+                                  <td>{{data[0]}}</td>
+                                  <td>{{data[1]}}</td>
+                                  <td>{{data[2]}}</td>
+                                  <td>{{data[3]}}</td>
+                                  <td>{{data[4]}}</td>
+                                  <td (click)="eliminarPersona(inde)"><i *ngIf="i!==0" class="fas fa-trash cursor-pointer" ></i></td>
+                                  <td ><i *ngIf="i!==0" class="fas fa-edit cursor-pointer"></i></td>
+                                </tr>
+                              </ng-container>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
