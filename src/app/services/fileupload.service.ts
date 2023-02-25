@@ -10,6 +10,8 @@ export class fileService{
         return[...this._dataFile]; 
     }
 
+
+    
     constructor(){
         // console.log("se inicializo")
     }
