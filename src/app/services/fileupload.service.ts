@@ -1,18 +1,29 @@
 import { Injectable } from "@angular/core";
 import * as XLSX from 'xlsx';
+import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
+import { Observable } from 'rxjs';
 
 
 @Injectable()
 export class fileService{
     private _dataFile: any[]=[]; 
 
+    private baseUrl = 'http://localhost:3001/api';
+    private apiEndpointStorage = '/storage';
+    private apiEndpointStorageFile = '/storage/files';
+
+    private headersCors = new HttpHeaders({
+        'Content-Type': 'application/json',
+        'Access-Control-Allow-Origin': '*'
+      });
+
     get dataFile():string[]{
         return[...this._dataFile]; 
     }
 
 
-    
-    constructor(){
+
+    constructor(private http: HttpClient){
         // console.log("se inicializo")
     }
 
@@ -43,12 +54,29 @@ export class fileService{
         reader.readAsBinaryString(file);
       }
 
-
-      eliminarPersona(index: number) {
-        if (index !== -1) {
-            console.log(this._dataFile)
-          //this._dataFile.splice(index, 1);
-          console.error(this._dataFile)
-        }
+      onSubmit(file:File) {
+        const url = this.baseUrl + this.apiEndpointStorageFile;
+        const FileFormData = new FormData();
+        FileFormData.append('myfile', file);
+        
+        FileFormData.forEach((value, key) => {
+            console.log(key, value);
+        });
+        this.http.post(url, FileFormData).subscribe((data: any) => {
+          console.log(data);
+        });
       }
+      
+
+
+    GetInfoFiles(): Observable<any>{
+        const url = this.baseUrl + this.apiEndpointStorageFile;
+        return this.http.get<any>(url);
+    }
+
+
+    eliminarPersona(id: String): Observable<any> {
+      const url = `${this.baseUrl}${this.apiEndpointStorage}/${id}`;
+      return this.http.delete<any>(url);
+    }
 }

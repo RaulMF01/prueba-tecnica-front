@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { fileService } from '../services/fileupload.service';
 import { ToastrService } from 'ngx-toastr';
 import { generalService } from '../services/general.service';
@@ -12,12 +12,16 @@ import { generalService } from '../services/general.service';
 
 
 export class MainPageComponent {
-  
+  fileUpload: File | undefined;
+
+  @Input () nuevo: any={
+    file: ""
+  };
 
   archivoSeleccionado: File | null = null;
 
 
-  constructor ( private fileService:fileService, private notification:generalService){ 
+  constructor ( private fileService:fileService, private general:generalService){ 
     this.fileService
   }
 
@@ -30,10 +34,7 @@ export class MainPageComponent {
      if (files.length > 0) {
       const archivo = files[0];
       if (this.fileService.validarArchivo(archivo)) {
-        // el archivo es de tipo Excel, puedes procesarlo
-        this.archivoSeleccionado = archivo;
-        this.fileService.onFileChange(event)
-
+        this.fileUpload = event.target.files[0];
       } else {
         // el archivo no es de tipo Excel, muestra un mensaje de error
         alert('El archivo seleccionado no es de tipo Excel');
@@ -42,8 +43,14 @@ export class MainPageComponent {
     }
   }
 
-
-  eliminarPersona(index: number) {
-    this.fileService.eliminarPersona(index)
+  onSubmitFile(event: Event){
+    event.preventDefault();
+    if(this.fileUpload){
+      const FileData = new FormData();
+        FileData.append('myfile', this.fileUpload);
+       this.fileService.onSubmit(this.fileUpload);
+    }
   }
+
+
 }

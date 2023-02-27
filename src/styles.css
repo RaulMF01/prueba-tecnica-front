@@ -6,3 +6,8 @@ html, body{
 .cursor-pointer{
     cursor: pointer;
 }
+
+.close{
+    background: transparent;
+    border: none;
+}
